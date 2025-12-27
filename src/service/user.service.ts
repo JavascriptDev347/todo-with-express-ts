@@ -27,7 +27,6 @@ class UserService {
         return {user, token}
     }
 
-
     public async signIn(input: IUserLoginRequest): Promise<IUserResponse> {
         const existUser = await this.userModel.findOne({email: input.email});
         if (!existUser) {
@@ -52,7 +51,6 @@ class UserService {
         return {user: existUser, token};
     }
 
-
     public async getMe(email: string) {
         const result = await this.userModel.findOne({email: email});
         if (!result) {
@@ -60,6 +58,10 @@ class UserService {
         }
 
         return result;
+    }
+
+    public async getUserAllTodos(email: string) {
+        return await this.userModel.find({email}).populate('todos');
     }
 }
 

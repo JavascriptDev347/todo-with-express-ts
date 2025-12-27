@@ -1,10 +1,6 @@
-import bcrypt from "bcryptjs";
 import type {Response, NextFunction, Request} from "express";
 import jwt from "jsonwebtoken"
-import type {UserRequest} from "../interfaces/IUser.ts";
-export const hashedPassword = ()=>{
-    const salt = bcrypt.getSalt(String(10));
-}
+
 
 export const authenticateToken = (
     req: Request,

@@ -35,3 +35,13 @@ export const getMe = async (req: Request, res: Response) => {
 
     }
 }
+
+export const getUserAllTodos = async (req: Request, res: Response) => {
+    try{
+        const email = req.user.email
+        const result =  await userService.getUserAllTodos(email)
+        return res.status(200).json({success: true, result});
+    }catch(error){
+        return res.status(400).json({success: false, message: "Something went wrong " + error.message});
+    }
+}

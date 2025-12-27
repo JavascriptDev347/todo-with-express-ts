@@ -1,4 +1,4 @@
-import mongoose, {Schema} from "mongoose";
+import mongoose, {Schema, Types} from "mongoose";
 
 const todoSchema = new Schema({
     name:{
@@ -11,7 +11,11 @@ const todoSchema = new Schema({
     },
     tags:{
         type:[String],
+    },
+    author:{
+        type:Types.ObjectId,
+        ref:"User",
     }
 },{timestamps:true});
 
-export default mongoose.model("TodoSchema",todoSchema);
+export default mongoose.model("Todo",todoSchema);

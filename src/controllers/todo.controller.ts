@@ -14,7 +14,7 @@ export const getAllTodos = async (req:Request,res:Response) =>{
 
 export const createTodo = async (req:Request,res:Response)=>{
     try{
-     await todoService.createTodo(req.body);
+     await todoService.createTodo(req.body,req.user.id);
      return res.status(201).json({success:true,message:"New todo created successfully !!!"});
     }catch(error){
         return res.status(400).json({success:false,message:"Something went wrong "+ error.message});
