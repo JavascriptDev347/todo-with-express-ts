@@ -28,9 +28,9 @@ app.listen(PORT, ()=>{
 app.use(router);
 
 
+
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerSpec));
 
-console.log(123)
 
 
 

@@ -1,5 +1,8 @@
 import express from "express";
 import {createTodo, deleteTodo, getAllTodos, updateTodo} from "../controllers/todo.controller.ts"
+import {getMe, signIn, signUp} from "../controllers/user.controller.ts";
+import {authenticateToken} from "../libs/auth.ts";
+import type {UserRequest} from "../interfaces/IUser.ts";
 
 const router = express.Router();
 /**
@@ -65,5 +68,13 @@ router
 router
     .delete("/delete/:id",deleteTodo);
 
+
+//  ===== USER =====
+router.post("/signup",signUp);
+router.post("/login",signIn);
+router.get("/get-me",
+    authenticateToken,
+    getMe
+)
 
 export default router;
