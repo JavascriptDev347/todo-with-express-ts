@@ -1,16 +1,29 @@
 import swaggerJSDoc from "swagger-jsdoc";
 const options:swaggerJSDoc.Options = {
     definition: {
-        openapi: '3.0.0', // Specify the OpenAPI version
+        openapi: "3.0.0",
         info: {
-            title: 'Your API Documentation',
-            version: '1.0.0',
-            description: 'API documentation for your Node.js Express TypeScript application',
+            title: "Todo API",
+            version: "1.0.0",
+            description: "Todo app uchun REST API",
         },
         servers: [
             {
-                url: 'http://localhost:4000/', // Adjust as needed
-                description: 'Development server',
+                url: "http://localhost:4000",
+            },
+        ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT",
+                },
+            },
+        },
+        security: [
+            {
+                bearerAuth: [],
             },
         ],
     },
