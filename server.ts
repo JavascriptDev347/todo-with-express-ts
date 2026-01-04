@@ -4,6 +4,7 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import router from "./src/routes/router.ts";
 import swaggerSpec from "./src/swagger/swagger-docs.ts";
+import userRouter from "./src/routes/user.ts"
 dotenv.config();
 
 const URL = process.env.MONGO_URL;
@@ -17,7 +18,7 @@ app.use(express.json());
 app.listen(PORT, ()=>{
     console.log("Server running on port: " + PORT);
     console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
-    mongoose.connect(URL).then(data=>{
+    mongoose.connect(URL as string).then(data=>{
         console.log("Connected to MongoDB");
 
     }).catch(error=>{
@@ -26,6 +27,7 @@ app.listen(PORT, ()=>{
 });
 // router
 app.use(router);
+app.use('/user',userRouter)
 
 
 

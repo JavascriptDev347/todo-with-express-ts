@@ -1,4 +1,5 @@
-import mongoose, {Schema,Types} from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
+import { Role } from "../types/enum/role.enum.ts";
 
 
 const userSchema = new Schema({
@@ -11,16 +12,21 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-    name:{
+    name: {
         type: String,
         required: true,
     },
-    todos:[
+    role: {
+        type: String,
+        enum: Role,
+        default: Role.USER,
+    },
+    todos: [
         {
-            type:Types.ObjectId,
-            ref:"Todo",
+            type: Types.ObjectId,
+            ref: "Todo",
         }
     ]
-},{timestamps:true});
+}, { timestamps: true });
 
 export default mongoose.model('User', userSchema);
