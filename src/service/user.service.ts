@@ -2,8 +2,7 @@ import type { IUserLoginRequest, IUserRequest, IUserResponse } from "../interfac
 import generateToken from "../libs/token.ts";
 import UserSchema from "../schema/user.schema.ts";
 import bcrypt from "bcryptjs"
-import jwt from "jsonwebtoken"
-import { Role } from "../types/enum/role.enum.ts";
+import Errors, { HttpCode, Message } from "../libs/Error.ts";
 
 class UserService {
     private readonly userModel;
@@ -12,35 +11,34 @@ class UserService {
         this.userModel = UserSchema;
     }
 
-    public async signUp(input: IUserRequest): Promise<IUserResponse> {
+    public async signUp(input: IUserRequest, image_url?: string): Promise<IUserResponse> {
 
         const existUser = await this.userModel.findOne({ email: input.email });
         if (existUser) {
-            throw new Error("User already exists");
+            throw new Errors(HttpCode.BAD_REQUEST, Message.USED_NICK_PHONE)
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(input.password, salt);
 
-        const token = generateToken(existUser._id, input.email, existUser.role);
+        const user = await this.userModel.create({ email: input.email, password: hashedPassword, name: input.name, profilePicture: image_url });
+        const token = generateToken(user._id, input.email, user.role);
 
-        const user = await this.userModel.create({ email: input.email, password: hashedPassword, name: input.name });
         return { user, token }
     }
 
     public async signIn(input: IUserLoginRequest): Promise<IUserResponse> {
-        const existUser = await this.userModel.findOne({ email: input.email });
+        const existUser = await this.userModel.findOne({ email: input.email }).select("+password -todos").exec();
         if (!existUser) {
-            throw new Error(`User not found with this email ${input.email}`);
+            throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
         }
 
         const isMatch = await bcrypt.compare(input.password, existUser.password);
 
         if (!isMatch) {
-            throw new Error("Incorrect password");
+            throw new Errors(HttpCode.BAD_REQUEST, Message.WRONG_PASSWORD);
         }
 
         const token = generateToken(existUser._id, input.email, existUser.role);
-
         return { user: existUser, token };
     }
 
@@ -54,7 +52,12 @@ class UserService {
     }
 
     public async getUserAllTodos(email: string) {
-        return await this.userModel.find({ email }).populate('todos');
+        const todos = await this.userModel.find({ email })
+            .select("todos")
+            .populate('todos')
+            .lean()
+            .exec();
+        return todos[0].todos || [];
     }
 }
 

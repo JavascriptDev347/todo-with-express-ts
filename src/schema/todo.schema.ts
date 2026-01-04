@@ -1,21 +1,40 @@
-import mongoose, {Schema, Types} from "mongoose";
+import mongoose, { Schema, Types } from "mongoose";
+import { TodoStatus } from "../types/enum/todo-status.enum.ts";
 
 const todoSchema = new Schema({
-    name:{
-        type:String,
-        required:true,
+    name: {
+        type: String,
+        required: true,
     },
-    description:{
-        type:String,
-        required:true,
+    description: {
+        type: String,
+        required: true,
     },
-    tags:{
-        type:[String],
+    tags: {
+        type: [String],
+        required: true
     },
-    author:{
-        type:Types.ObjectId,
-        ref:"User",
+    author: {
+        type: Types.ObjectId,
+        ref: "User",
+    },
+    date: {
+        type: Date,
+        required: true
+    },
+    time: {
+        type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: TodoStatus,
+        default: TodoStatus.ACTIVE
+    },
+    completed: {
+        type: Boolean,
+        default: false
     }
-},{timestamps:true});
+}, { timestamps: true });
 
-export default mongoose.model("Todo",todoSchema);
+export default mongoose.model("Todo", todoSchema);

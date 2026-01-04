@@ -1,5 +1,5 @@
 import TodoSchema from "../schema/todo.schema.ts";
-import type {IResponse, ITodoRequest, ITodoResponse} from "../interfaces/ITodo.ts";
+import type { IResponse, ITodoRequest, ITodoResponse } from "../interfaces/ITodo.ts";
 import UserSchema from "../schema/user.schema.ts";
 
 class TodoService {
@@ -21,15 +21,17 @@ class TodoService {
             name: input.name,
             description: input.description,
             tags: input.tags,
-            author: id
+            author: id,
+            time: input.time,
+            date: input.date
         });
 
         await this.userModel.findByIdAndUpdate(
             id, {
-                $push: {todos: todo._id}
-            }, {
-                new: true
-            }        );
+            $push: { todos: todo._id }
+        }, {
+            new: true
+        });
 
         return todo;
     }
@@ -40,7 +42,7 @@ class TodoService {
             throw new Error("Id not found");
         }
 
-        return {success: true, message: "Deleted"}
+        return { success: true, message: "Deleted" }
     }
 
     public async updateTodo(id: string, input: ITodoRequest): Promise<IResponse> {
@@ -49,7 +51,7 @@ class TodoService {
             throw new Error("Id not found");
         }
 
-        return {success: true, message: "Updated"}
+        return { success: true, message: "Updated" }
     }
 }
 

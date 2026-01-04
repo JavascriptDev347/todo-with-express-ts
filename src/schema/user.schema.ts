@@ -1,7 +1,6 @@
 import mongoose, { Schema, Types } from "mongoose";
 import { Role } from "../types/enum/role.enum.ts";
 
-
 const userSchema = new Schema({
     email: {
         type: String,
@@ -10,7 +9,8 @@ const userSchema = new Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        select: false
     },
     name: {
         type: String,
@@ -20,6 +20,9 @@ const userSchema = new Schema({
         type: String,
         enum: Role,
         default: Role.USER,
+    },
+    profilePicture: {
+        type: String
     },
     todos: [
         {
