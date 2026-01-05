@@ -10,7 +10,6 @@ function getTargetImageStorage(address: any) {
     return multer.diskStorage({
         destination: function (req, file, cb) {
             cb(null, `./uploads/${address}`);
-
         },
         filename: function (req, file, cb) {
             const extension = path.parse(file.originalname).ext;

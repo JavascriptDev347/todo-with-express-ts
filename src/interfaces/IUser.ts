@@ -3,9 +3,14 @@ export interface IUserLoginRequest {
     password: string;
 }
 
-export interface IUserRequest  {
+export interface IUserRequest {
     email: string;
     password: string;
+    name: string;
+}
+
+export interface IUserEditRequest {
+    email: string;
     name: string;
 }
 
@@ -19,10 +24,10 @@ interface IUser {
 
 
 export interface IUserResponse {
-  token : string;
-  user:IUser;
+    token: string;
+    user: IUser;
 }
 
 export interface UserRequest extends Request {
-    user:IUser;
+    user: IUser;
 }

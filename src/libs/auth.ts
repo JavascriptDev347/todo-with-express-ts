@@ -1,5 +1,6 @@
-import type {Response, NextFunction, Request} from "express";
+import type { Response, NextFunction, Request } from "express";
 import jwt from "jsonwebtoken"
+import { Role } from "../types/enum/role.enum.ts";
 
 
 export const authenticateToken = (
@@ -23,4 +24,27 @@ export const authenticateToken = (
         req.user = user;
         next();
     });
+}
+
+
+export const isAdmin = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
+
+    const user = req.user;
+
+    // user bo‘lmasa yoki role ADMIN bo‘lmasa
+    if (!user || user.role !== Role.ADMIN) {
+        res.status(403).json({
+            success: false,
+            message: "Forbidden. You are not admin"
+        });
+        return;
+    }
+
+    console.log("role", user.role);
+    next();
+
 }

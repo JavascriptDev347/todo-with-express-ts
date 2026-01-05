@@ -4,7 +4,8 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import router from "./src/routes/router.ts";
 import swaggerSpec from "./src/swagger/swagger-docs.ts";
-import userRouter from "./src/routes/user.ts"
+import userRouter from "./src/routes/user.ts";
+import categoryRouter from "./src/routes/category.ts"
 import path from "path";
 import { fileURLToPath } from "url";
 import { startExpiredTodosCron } from './src/libs/utils/crone';
@@ -39,7 +40,7 @@ app.listen(PORT, () => {
 // router
 app.use(router);
 app.use('/user', userRouter)
-
+app.use("/category", categoryRouter)
 
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

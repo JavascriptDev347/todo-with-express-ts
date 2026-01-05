@@ -1,4 +1,4 @@
-import type { IUserLoginRequest, IUserRequest, IUserResponse } from "../interfaces/IUser.ts";
+import type { IUserEditRequest, IUserLoginRequest, IUserRequest, IUserResponse } from "../interfaces/IUser.ts";
 import generateToken from "../libs/token.ts";
 import UserSchema from "../schema/user.schema.ts";
 import bcrypt from "bcryptjs"
@@ -58,6 +58,16 @@ class UserService {
             .lean()
             .exec();
         return todos[0].todos || [];
+    }
+
+    public async editUserInfo(input: IUserEditRequest, id: string) {
+
+        const user = await this.userModel.findByIdAndUpdate(id, input, { new: true });
+        if (!user) {
+            throw new Errors(HttpCode.BAD_REQUEST, Message.USER_NOT_FOUND)
+        }
+
+        return { user }
     }
 }
 

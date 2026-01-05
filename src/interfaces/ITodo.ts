@@ -1,3 +1,5 @@
+import type { Types } from "mongoose";
+
 export interface ITodoResponse {
     name: string;
     description: string;
@@ -14,6 +16,7 @@ export interface ITodoRequest {
     tags: Array<string>;
     time: string;
     date: Date;
+    categoryId: Types.ObjectId
 }
 
 export interface IResponse {

@@ -1,9 +1,21 @@
 import Joi from "joi";
+import { Types } from "mongoose";
 // current date without seconds
-const now = new Date();
+
 export const createTodoValidation = Joi.object({
     name: Joi.string().min(4).max(36).required(),
     description: Joi.string().min(4).max(250).required(),
+    categoryId: Joi.string()
+        .custom((value, helpers) => {
+            if (!Types.ObjectId.isValid(value)) {
+                return helpers.error('any.invalid');
+            }
+            return value;
+        })
+        .required()
+        .messages({
+            'any.invalid': 'categoryId noto‘g‘ri ObjectId'
+        }),
     tags: Joi.array()
         .items(Joi.string().min(1).max(30)) // har element string, 1-30 char
         .min(1)                              // kamida 1 tag bo‘lishi shart
@@ -47,8 +59,5 @@ export const createTodoValidation = Joi.object({
             "string.pattern.base": "time must be in HH:mm format",
             "any.required": "time is required",
         }),
-
-
-
 
 })

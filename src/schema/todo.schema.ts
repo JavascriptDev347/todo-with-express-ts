@@ -18,6 +18,10 @@ const todoSchema = new Schema({
         type: Types.ObjectId,
         ref: "User",
     },
+    categoryId: {
+        type: Types.ObjectId,
+        ref: "Category"
+    },
     date: {
         type: Date,
         required: true

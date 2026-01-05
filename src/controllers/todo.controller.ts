@@ -3,13 +3,14 @@ import TodoService from "../service/todo.service.ts";
 import { createTodoValidation } from '../validation/todo.validation.ts';
 import type { ITodoRequest } from '../interfaces/ITodo.ts';
 import Errors, { HttpCode } from '../libs/Error.ts';
+import { TodoStatus } from '../types/enum/todo-status.enum.ts';
 
 const todoService = new TodoService();
 
 export const getAllTodos = async (req: Request, res: Response) => {
     try {
         const result = await todoService.getAllTodos();
-        return res.status(200).json(result);
+        return res.status(200).json({ todos: result });
     } catch (error) {
         return res.status(400).json({ message: error.message });
     }
@@ -74,3 +75,25 @@ export const deleteTodo = async (req: Request, res: Response) => {
         return res.status(400).json({ success: false, message: "Something went wrong " + error.message });
     }
 }
+
+export const updateTodoStatus = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id as string;
+        const { status } = req.body;
+
+        // 2️⃣ Status validligini tekshirish
+        if (!Object.values(TodoStatus).includes(status)) {
+            return res.status(400).json({ success: false, message: "Invalid status value" });
+        }
+        const todo = await todoService.updateTodoStatus(id, status)
+        return res.status(200).json({ success: true, data: todo });
+    } catch (error: any) {
+        // 2️⃣ Custom error throw qilingan
+        if (error instanceof Errors) {
+            return res.status(error.code).json(error);
+        }
+
+        // 3️⃣ Generic server error
+        return res.status(HttpCode.INTERNAL_SERVER_ERROR).json(Errors.standart);
+    }
+};
